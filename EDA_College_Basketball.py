@@ -15,12 +15,15 @@ This app performs simple webscraping of College Basketball player stats data!
 
 st.sidebar.header('User Input Features')
 selected_year = st.sidebar.selectbox('Year', list(reversed(range(1949,2023))))
-#team = "north-carolina"
+
+unique_team = ['north-carolina','bethune-cookman','lehigh','north-carolina-at','north-carolina-central']
+selected_team = st.sidebar.selectbox('Team', list(unique_team))
+
 
 # Web scraping of College player stats
 @st.cache
 def load_data(year):
-    url = "https://www.sports-reference.com/cbb/schools/north-carolina/" + str(year) + ".html"
+    url = "https://www.sports-reference.com/cbb/schools/" + str(selected_team) +"/" + str(year) + ".html"
     html = pd.read_html(url, header = 0)
     df = html[5]
     raw = df.fillna(0)
@@ -29,9 +32,6 @@ def load_data(year):
 playerstats = load_data(selected_year)
 #st.dataframe(playerstats)
 
-# Sidebar - Team selection
-#sorted_unique_team = sorted(playerstats.Tm.unique())
-#selected_team = st.sidebar.multiselect('Team', sorted_unique_team, sorted_unique_team)
 
 # Sidebar - Player selection
 sorted_unique_Player = sorted(playerstats.Player.unique())
