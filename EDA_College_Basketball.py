@@ -38,8 +38,8 @@ sorted_unique_Player = sorted(playerstats.Player.unique())
 selected_Player = st.sidebar.multiselect('Player', sorted_unique_Player, sorted_unique_Player)
 
 # Sidebar - Position selection
-unique_pos = ['C','PF','SF','PG','SG']
-selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
+#unique_pos = ['C','PF','SF','PG','SG']
+#selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
 
 # Filtering data
 #df_selected_Player = playerstats[(playerstats.Player.isin(selected_Player)) & (playerstats.Pos.isin(selected_pos))]
