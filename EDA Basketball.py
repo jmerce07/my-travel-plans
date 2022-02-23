@@ -9,12 +9,12 @@ st.title('NBA Player Stats Explorer')
 
 st.markdown("""
 This app performs simple webscraping of NBA player stats data!
-* **Python libraries:** base64, pandas, streamlit
+* **Python libraries:** base64, pandas, streamlit, numpy
 * **Data source:** [Basketball-reference.com](https://www.basketball-reference.com/).
 """)
 
 st.sidebar.header('User Input Features')
-selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2020))))
+selected_year = st.sidebar.selectbox('Year', list(reversed(range(1950,2023))))
 
 # Web scraping of NBA player stats
 @st.cache
@@ -38,6 +38,11 @@ selected_pos = st.sidebar.multiselect('Position', unique_pos, unique_pos)
 
 # Filtering data
 df_selected_team = playerstats[(playerstats.Tm.isin(selected_team)) & (playerstats.Pos.isin(selected_pos))]
+df_selected_team['FG%'] = df_selected_team['FG%'].astype(str).astype(float)
+df_selected_team['3P%'] = df_selected_team['3P%'].astype(str).astype(float)
+df_selected_team['2P%'] = df_selected_team['2P%'].astype(str).astype(float)
+df_selected_team['eFG%'] = df_selected_team['eFG%'].astype(str).astype(float)
+df_selected_team['FT%'] = df_selected_team['FT%'].astype(str).astype(float)
 
 st.header('Display Player Stats of Selected Team(s)')
 st.write('Data Dimension: ' + str(df_selected_team.shape[0]) + ' rows and ' + str(df_selected_team.shape[1]) + ' columns.')
@@ -58,11 +63,13 @@ if st.button('Intercorrelation Heatmap'):
     st.header('Intercorrelation Matrix Heatmap')
     df_selected_team.to_csv('output.csv',index=False)
     df = pd.read_csv('output.csv')
-
+    st.set_option('deprecation.showPyplotGlobalUse', False) #hides warning
+    
     corr = df.corr()
     mask = np.zeros_like(corr)
     mask[np.triu_indices_from(mask)] = True
     with sns.axes_style("white"):
         f, ax = plt.subplots(figsize=(7, 5))
         ax = sns.heatmap(corr, mask=mask, vmax=1, square=True)
+
     st.pyplot()
